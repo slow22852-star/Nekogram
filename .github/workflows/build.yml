@@ -32,11 +32,11 @@ jobs:
     - name: Apply OSINTO patches
       run: python patch_osinto.py
 
-    - name: Build Release APK
-      run: ./gradlew assembleRelease -x lint -x test --no-daemon
+    - name: Build Debug APK
+      run: ./gradlew assembleDebug -x lint -x test --no-daemon
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: OSINTOgramm-APK
-        path: TMessagesProj/build/outputs/apk/release/*.apk
+        name: OSINTOgramm-Debug-APK
+        path: TMessagesProj/build/outputs/apk/debug/*.apk
