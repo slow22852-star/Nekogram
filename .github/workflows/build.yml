@@ -29,14 +29,11 @@ jobs:
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
-    - name: Apply OSINTO patches
-      run: python patch_osinto.py
-
-    - name: Build Debug APK
+    - name: Build APK
       run: ./gradlew assembleDebug -x lint -x test --no-daemon
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: OSINTOgramm-Debug-APK
+        name: Nekogram-Clean-APK
         path: TMessagesProj/build/outputs/apk/debug/*.apk
