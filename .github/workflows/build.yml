@@ -26,17 +26,14 @@ jobs:
       with:
         packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
 
-    - name: Create local.properties
-      run: echo "sdk.dir=$ANDROID_HOME" > local.properties
-
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
     - name: Build APK
-      run: ./gradlew assembleDebug -x lint -x test --no-daemon
+      run: ./gradlew assembleDebug -x lint -x test --no-daemon -Pandroid.disableNavigationResources=true
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
       with:
-        name: Nekogram-Clean-APK
+        name: Nekogram-Debug-APK
         path: TMessagesProj/build/outputs/apk/debug/*.apk
