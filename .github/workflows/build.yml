@@ -26,24 +26,21 @@ jobs:
       with:
         packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
 
-    - name: Generate version properties
+    - name: Generate properties and patch build.gradle
       run: |
         echo "sdk.dir=$ANDROID_HOME" > local.properties
         echo "sdk.dir=$ANDROID_HOME" > TMessagesProj/local.properties
         echo "sdk.dir=$ANDROID_HOME" > TMessagesProj_App/local.properties
         
-        echo "TG_APP_VERSION_CODE=10" >> gradle.properties
-        echo "TG_APP_VERSION_NAME=10.0.0" >> gradle.properties
-        echo "android.disableNavigationResources=true" >> gradle.properties
-        
-        echo "APP_VERSION_CODE=10" > version.properties
-        echo "APP_VERSION_NAME=10.0.0" >> version.properties
+        # Жестко вписываем версию в build.gradle (если он ищет переменную)
+        sed -i 's/ext.TG_APP_VERSION_CODE = .*/ext.TG_APP_VERSION_CODE = 10/' TMessagesProj/build.gradle || true
+        sed -i 's/ext.TG_APP_VERSION_NAME = .*/ext.TG_APP_VERSION_NAME = "10.0.0"/' TMessagesProj/build.gradle || true
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
     - name: Build APK
-      run: ./gradlew assembleDebug -x lint -x test --no-daemon -PTG_APP_VERSION_CODE=10 -PTG_APP_VERSION_NAME=10.0.0 -Pandroid.disableNavigationResources=true
+      run: ./gradlew assembleDebug -x lint -x test --no-daemon -Pandroid.disableNavigationResources=true
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
