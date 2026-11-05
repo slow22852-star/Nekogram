@@ -26,14 +26,20 @@ jobs:
       with:
         packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
 
-    - name: Create local.properties
-      run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+    - name: Fix local.properties and properties
+      run: |
+        echo "sdk.dir=$ANDROID_HOME" > local.properties
+        echo "sdk.dir=$ANDROID_HOME" > TMessagesProj/local.properties
+        echo "sdk.dir=$ANDROID_HOME" > TMessagesProj_App/local.properties
+        echo "APP_VERSION_CODE=10" >> gradle.properties
+        echo "APP_VERSION_NAME=10.0.0" >> gradle.properties
+        echo "android.disableNavigationResources=true" >> gradle.properties
 
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
     - name: Build APK
-      run: ./gradlew assembleDebug -x lint -x test --no-daemon -Pandroid.disableNavigationResources=true -PAPP_VERSION_CODE=10 -PAPP_VERSION_NAME="10.0.0"
+      run: ./gradlew assembleDebug -x lint -x test --no-daemon
 
     - name: Upload APK
       uses: actions/upload-artifact@v4
