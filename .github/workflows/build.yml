@@ -26,6 +26,9 @@ jobs:
       with:
         packages: 'platform-tools platforms;android-34 build-tools;34.0.0'
 
+    - name: Create local.properties
+      run: echo "sdk.dir=$ANDROID_HOME" > local.properties
+
     - name: Grant execute permission for gradlew
       run: chmod +x gradlew
 
